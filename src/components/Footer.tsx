@@ -1,5 +1,4 @@
 import React from 'react';
-import { ArrowUpRight } from 'lucide-react';
 
 interface FooterProps {
   navigate: (route: string) => void;
@@ -40,14 +39,7 @@ export const Footer: React.FC<FooterProps> = ({ navigate }) => {
                   Find your skin phase
                 </button>
               </li>
-              <li>
-                <button
-                  onClick={() => navigate('/chat')}
-                  className="inline-flex items-center gap-1 hover:text-[#C86D51] transition-colors cursor-pointer"
-                >
-                  S.19 AI consultation <ArrowUpRight className="w-3 h-3" />
-                </button>
-              </li>
+
             </ul>
           </div>
 

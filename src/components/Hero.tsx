@@ -1,22 +1,35 @@
 import React from 'react';
-import { ArrowUpRight, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Sparkles, Mic, MicOff, Volume2, VolumeX } from 'lucide-react';
+import { S19Pod3D } from './S19Pod3D';
+import { useIxxVoiceConsultant } from '../utils/useIxxVoiceConsultant';
+import { ProductRecommendationPopup } from './ProductRecommendationPopup';
 
 interface HeroProps {
   onStart: () => void;
-  onOpenChat: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onStart, onOpenChat }) => {
-
+export const Hero: React.FC<HeroProps> = ({ onStart }) => {
+  const {
+    assistantState,
+    isMicActive,
+    isMuted,
+    speechLevel,
+    activeSubtitle,
+    showSubtitle,
+    recommendedProduct,
+    setRecommendedProduct,
+    toggleMic,
+    toggleMute,
+  } = useIxxVoiceConsultant(null);
 
   return (
     <div className="relative overflow-hidden">
       {/* Top Editorial Banner */}
       <section className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-12 sm:pt-16 lg:pt-20 pb-16 lg:pb-24 border-b border-[#C9C3B8]">
-        <div className="grid grid-cols-1 gap-10 lg:gap-14 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           
           {/* Left Column: Editorial Typography */}
-          <div className="space-y-8 max-w-4xl">
+          <div className="lg:col-span-6 xl:col-span-6 space-y-8">
             
             <div className="space-y-3">
               <span className="text-[11px] sm:text-xs uppercase tracking-[0.2em] text-[#6D6A63] font-medium block">
@@ -59,14 +72,7 @@ export const Hero: React.FC<HeroProps> = ({ onStart, onOpenChat }) => {
                 <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </button>
 
-              <button
-                onClick={onOpenChat}
-                className="group inline-flex items-center justify-center gap-2.5 px-6 py-4 border border-[#C9C3B8] text-[#171715] text-sm uppercase tracking-wider font-medium rounded-full hover:border-[#171715] transition-colors cursor-pointer"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#C86D51]" />
-                <span>Ask S.19 AI</span>
-                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-[#6D6A63]" />
-              </button>
+
             </div>
 
             {/* Micro details */}
@@ -87,11 +93,99 @@ export const Hero: React.FC<HeroProps> = ({ onStart, onOpenChat }) => {
 
           </div>
 
+          {/* Right Column: Seamless Interactive 3D S.19 Pod & AI Consultant */}
+          <div className="lg:col-span-6 xl:col-span-6 relative flex flex-col items-center justify-center min-h-[460px] sm:min-h-[520px] lg:min-h-[560px]">
+            
+            {/* Stable "IXX • CONSULTANT" Speech Bubble anchored cleanly above the 3D S.19 pod */}
+            {showSubtitle && (
+              <div className="w-full max-w-sm sm:max-w-md bg-[#171715]/95 backdrop-blur-md text-[#FAF8F4] px-4 sm:px-5 py-3 rounded-2xl shadow-xl border border-[#FAF8F4]/20 transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 z-20 mb-1 relative">
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`w-2 h-2 rounded-full ${
+                        assistantState === 'IXX IS SPEAKING'
+                          ? 'bg-[#E27D60] animate-ping'
+                          : assistantState === 'IXX IS LISTENING'
+                          ? 'bg-emerald-400 animate-pulse'
+                          : 'bg-amber-400'
+                      }`}
+                    />
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C86D51]">
+                      IXX • CONSULTANT
+                    </span>
+                  </div>
+                  <span className="text-[9px] uppercase tracking-wider text-[#A6A29A]">
+                    {assistantState}
+                  </span>
+                </div>
+                <p className="text-xs sm:text-[13px] text-[#FAF8F4] leading-relaxed font-medium">
+                  {activeSubtitle}
+                </p>
+                {/* Speech Bubble Pointer pointing downward towards the floating S.19 Pod */}
+                <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#171715]/95 border-r border-b border-[#FAF8F4]/20 rotate-45" />
+              </div>
+            )}
+
+            {/* The Real Interactive 3D S.19 Pod (Floating naturally with soft contact shadow, no box, no borders) */}
+            <div className="relative w-full h-[360px] sm:h-[420px] lg:h-[460px] flex items-center justify-center">
+              <S19Pod3D
+                state={assistantState}
+                speechLevel={speechLevel}
+                interactive={true}
+              />
+            </div>
+
+            {/* Discreet Floating Voice Consultant Controls attached cleanly below S.19 */}
+            <div className="mt-1 flex items-center gap-2.5 bg-[#171715]/90 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-[#FAF8F4]/15 shadow-md text-[#FAF8F4] z-20">
+              <button
+                type="button"
+                onClick={toggleMic}
+                className={`p-1 rounded-full transition-colors ${
+                  isMicActive ? 'text-emerald-400 bg-emerald-950/80' : 'text-[#A6A29A] hover:text-white'
+                }`}
+                title={isMicActive ? 'Mute Microphone' : 'Turn On Microphone'}
+              >
+                {isMicActive ? <Mic className="w-3.5 h-3.5 animate-pulse" /> : <MicOff className="w-3.5 h-3.5" />}
+              </button>
+
+              <button
+                type="button"
+                onClick={toggleMute}
+                className={`p-1 rounded-full transition-colors ${
+                  isMuted ? 'text-[#E27D60] bg-white/10' : 'text-[#A6A29A] hover:text-white'
+                }`}
+                title={isMuted ? 'Unmute Speaker' : 'Mute Speaker'}
+              >
+                {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+              </button>
+
+              <div className="h-3 w-px bg-white/20 mx-0.5" />
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (!isMicActive) toggleMic();
+                }}
+                className="text-[11px] tracking-wider text-[#DCD6CD] hover:text-white transition-colors cursor-pointer"
+              >
+                {isMicActive ? 'Live Voice Active · Speak freely' : 'Tap to enable live voice'}
+              </button>
+            </div>
+
+          </div>
 
         </div>
       </section>
 
-
+      {/* Recommended Product Pop-up (when IXX recommends an S.19 capsule cream) */}
+      {recommendedProduct && (
+        <div className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[90vw] animate-in fade-in slide-in-from-bottom-4 shadow-2xl">
+          <ProductRecommendationPopup
+            product={recommendedProduct}
+            onClose={() => setRecommendedProduct(null)}
+          />
+        </div>
+      )}
 
 
       {/* Secondary Story & Perspective Section (Inspired by reference screenshot) */}

@@ -194,7 +194,7 @@ export const ResultPage: React.FC<ResultPageProps> = ({
             </div>
           )}
 
-          {/* Primary Action Button: "Ask S.19 AI ↗" */}
+          {/* Primary Action Button: "Talk to IXX ↗" */}
           <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
             <button
               id="ask-s19-ai-btn"
@@ -202,7 +202,7 @@ export const ResultPage: React.FC<ResultPageProps> = ({
               className="group flex-1 inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#171715] text-[#F4F0E8] text-xs uppercase tracking-widest font-medium rounded-full hover:bg-[#2A2926] transition-all shadow-sm cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-[#C86D51]" />
-              <span>Ask S.19 AI</span>
+              <span>Talk to IXX</span>
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </button>
 

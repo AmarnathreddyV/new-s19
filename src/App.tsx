@@ -6,17 +6,16 @@ import { PhaseSelector } from './components/PhaseSelector';
 import { Assessment } from './components/Assessment';
 import { VisualPhasePicker } from './components/VisualPhasePicker';
 import { ResultPage } from './components/ResultPage';
-import { ChatAssistant } from './components/ChatAssistant';
 import { RoamingIxxConsultant } from './components/RoamingIxxConsultant';
 import { SkinPhaseId, StoredSessionContext } from './types';
 import { SKIN_PHASES } from './data/phases';
 
 export default function App() {
-  // Navigation state: '/', '/find-phase', '/assessment', '/visual-picker', '/result', '/chat'
+  // Navigation state: '/', '/find-phase', '/assessment', '/visual-picker', '/result'
   const [currentRoute, setCurrentRoute] = useState<string>(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.replace('#', '');
-      if (['/', '/find-phase', '/assessment', '/visual-picker', '/result', '/chat'].includes(hash)) {
+      if (['/', '/find-phase', '/assessment', '/visual-picker', '/result'].includes(hash)) {
         return hash;
       }
     }
@@ -52,7 +51,7 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
-      if (hash && ['/', '/find-phase', '/assessment', '/visual-picker', '/result', '/chat'].includes(hash)) {
+      if (hash && ['/', '/find-phase', '/assessment', '/visual-picker', '/result'].includes(hash)) {
         setCurrentRoute(hash);
       }
     };
@@ -109,8 +108,7 @@ export default function App() {
         {currentRoute === '/' && (
           <Hero
             onStart={() => navigate('/find-phase')}
-            onOpenChat={() => navigate('/chat')}
-          />
+            />
         )}
 
         {currentRoute === '/find-phase' && (
@@ -139,25 +137,12 @@ export default function App() {
           <ResultPage
             phaseId={activePhaseId || 'DEHYDRATION'}
             isSafetyOverride={isSafetyOverride}
-            onAskAI={() => navigate('/chat')}
+            onAskAI={() => { /* Use the floating IXX consultant instead of a second chatbot. */ }}
             onRetake={() => navigate('/assessment')}
             onViewAllPhases={() => navigate('/visual-picker')}
           />
         )}
 
-        {currentRoute === '/chat' && (
-          <ChatAssistant
-            currentPhaseId={activePhaseId}
-            onBack={() => {
-              if (activePhaseId) {
-                navigate('/result');
-              } else {
-                navigate('/');
-              }
-            }}
-            onNavigateToFinder={() => navigate('/find-phase')}
-          />
-        )}
       </main>
 
       {/* Minimal Editorial Footer */}
